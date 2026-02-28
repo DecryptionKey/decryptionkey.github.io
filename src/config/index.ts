@@ -1,23 +1,21 @@
 import type { SiteConfig, SiteContent } from "../types";
 
 export const SITE_CONFIG: SiteConfig = {
-  title: "Alejandro Múnez — Mobile & Web Developer",
-  author: "Alejandro Múnez Cuntez",
+  title: "Ma'Nye Wade — Cybersecurity Professional",
+  author: "Ma'Nye Wade",
   description:
-    "Software Engineer based in San Francisco, USA. I specialize in UI design, web and mobile application development and maintenance.",
+    "Junior Cybersecurity professional based in New York, specializing in Cyber Operations, Network Defense, threat detection, and incident response.",
   lang: "en",
-  siteLogo: "/alejandro-small.jpg",
+  siteLogo: "/mw-logo-wht-800.png",
   navLinks: [
     { text: "Experience", href: "#experience" },
     { text: "Projects", href: "#projects" },
     { text: "About", href: "#about" },
   ],
   socialLinks: [
-    { text: "Twitter", href: "https://github.com/immois/astro-zen" },
-    { text: "LinkedIn", href: "https://github.com/immois/astro-zen" },
-    { text: "Github", href: "https://github.com/immois/astro-zen" },
-    { text: "Youtube", href: "https://github.com/immois/astro-zen" },
-    { text: "Dribbble", href: "https://github.com/immois/astro-zen" },
+    { text: "LinkedIn", href: "https://linkedin.com/in/manyewade" },
+    { text: "Github", href: "https://github.com/decryptionkey" },
+    { text: "Resume", href: "https://drive.google.com/file/d/1hES5tdXZK-vKiQKT6LPTTinFGzw38Wpt/view?usp=sharing"},
   ],
   socialImage: "/zen-og.png",
   canonicalURL: "https://astro-zen.vercel.app",
@@ -25,73 +23,65 @@ export const SITE_CONFIG: SiteConfig = {
 
 export const SITE_CONTENT: SiteContent = {
   hero: {
-    name: "Alejandro Múnez",
-    specialty: "Mobile & Web Developer",
+    name: "Ma'Nye Wade",
+    specialty: "Cybersecurity Professional",
     summary:
-      "Developer based in San Francisco, USA. I specialize in UI design, web and mobile application development and maintenance.",
-    email: "example@email.com",
+      "Cybersecurity professional based in New York, specializing in Cyber Operations, Network Defense, Threat Detection, and Incident Response.",
+    email: "nyebusiness@protonmail.com",
   },
   experience: [
     {
-      company: "Zalmart",
-      position: "Lead Android Developer",
-      startDate: "May 2018",
-      endDate: "Sept 2020",
+      company: "Marist University",
+      position: "Cybersecurity Specialist: Vulnerability Management and Email Security",
+      startDate: "May 2025",
+      endDate: "Dec 2025",
       summary: [
-        "Implemented advanced memory management and code optimization techniques, resulting in a reduction in application load time by 40% and a decrease in crashes by 25%. This significantly improved user experience and increased user retention by 20%.",
-        "I led a team of developers in building and integrating new features using Jetpack Android components such as LiveData and ViewModel. This enabled us to build scalable and maintainable applications, reducing the crash rate by 20% and speeding up the time to delivery of new features by 15%.",
-        "Integrated Google Pay for in-app purchases, resulting in a 35% increase in mobile transaction revenue. Additionally, implemented Firebase Analytics to gain insights into user behavior, enabling data-driven optimizations and a 30% increase in user retention.",
-      ],
+        "Triaged Microsoft Defender XDR alerts daily, performing independent true/false positive determinations and documenting suspicious indicators in a structured tracking log to support escalation decisions by senior analysts.",
+        "Conducted endpoint vulnerability assessment using Tenable Nessus, identifying and reporting a high volume of critical vulnerabilities stemming from prolonged patch neglect and delivering remediation recommendations to management.",
+        "Developed 6–10 incident response flowcharts aligned to security playbooks, standardizing threat detection and remediation workflows across a 3–4 person student cybersecurity team.",
+        "Researched emerging CVEs and security patches, producing written vulnerability reports to inform remediation prioritization and reduce organizational risk exposure.",
+        "Produced and delivered security awareness content including blog posts and workshops for university staff and students, covering phishing, social engineering, and secure behavior practices.",
+      ]
     },
     {
-      company: "Bankit",
-      position: "Mobile Developer",
-      startDate: "Feb 2017",
-      endDate: "May 2018",
+      company: "",
+      position: "IT Help Desk Technician",
+      startDate: "Sept 2024",
+      endDate: "May 2025",
       summary: [
-        "I designed and developed a mobile application using Flutter, allowing it to be deployed on both Android and iOS with a single codebase. This reduced development time by 50% and maintenance costs by 30%, facilitating a consistent user experience on both platforms.",
-        "I integrated biometric authentication and data encryption, significantly improving the security of user data. This implementation resulted in a 40% increase in user trust and a 25% reduction in unauthorized access attempts.",
+        "Resolved 300+ tickets across walk-in, phone, and portal channels via TeamDynamix ITSM, delivering Tier 1/2 support to 5,000+ users including VPN troubleshooting, IAM operations, DUO Security MFA enrollment, and password resets via ReACT self-service solution.",
+        "Achieved 98% uptime for 5+ WEPA print stations through preventive maintenance and hardware troubleshooting while enforcing data security and confidentiality protocols across campus computer labs.",
+        "Triaged and routed support requests by assessing scope and permissions, independently resolving issues within authority and escalating access-restricted tasks to full-time IT staff or corresponding departments.",
+        "Improved IT service delivery by authoring KBAs and SOPs documenting resolution workflows, and designing a Help Desk website wireframe that was successfully implemented to streamline user access to support resources.",
+        "Informally mentored fellow student technicians on a team of 8–10, sharing troubleshooting approaches and resolution workflows to support team consistency and service quality.",
       ],
-    },
-    {
-      company: "Driveer",
-      position: "Frontend Developer",
-      startDate: "Jun 2015",
-      endDate: "Oct 2016",
-      summary:
-        "Developed and integrated a real-time vehicle tracking system using WebSockets, improving accuracy and data update in the application. This functionality increased user satisfaction by 30% and reduced customer service inquiries by 25%.",
     },
   ],
   projects: [
     {
-      name: "Spotifu Music",
-      summary: "A music streaming app that emulates Spotify's core features.",
+      name: "Asset Discovery",
+      summary: "Mapped an undocumented multi-router network using Nmap, Quagga, and pfSense — reconstructing the full topology, identifying active hosts across six subnets, and delivering a professional HTML asset inventory report.",
       linkPreview: "/",
-      linkSource: "https://github.com/immois/astro-zen",
-      image: "/spotifu.png",
+      linkSource: "https://github.com/DecryptionKey/CYBR204/blob/main/Labs/Network%20Infrastructure%20Assessment%20%26%20Asset%20Discovery.md",
+      image: "/niaad-topology.png",
     },
     {
-      name: "Shopp App",
-      summary: "An e-commerce platform that replicates Shopify's key features.",
-      linkPreview: "/",
-      linkSource: "https://github.com/immois/astro-zen",
-      image: "/shopify-clon.png",
-    },
-    {
-      name: "ClonTagram",
-      summary: "A social network that replicates the features of Instagram",
-      linkPreview: "/",
-      linkSource: "https://github.com/immois/astro-zen",
-      image: "/clone-ig.png",
+      name: "Arx Social",
+      summary: "A beginner social media web application built as a school project, replicating the core functionality of X (formerly Twitter) with a personal design touch.",
+      linkPreview: "https://arx-social--dezloridcorpora.replit.app",
+      linkSource: "https://github.com/decryptionkey/arx-social",
+      image: "/arx-42.png",
     },
   ],
   about: {
     description: `
-      Hi, I’m Alejandro Múnez, a passionate Mobile and Web Developer with a knack for crafting seamless digital experiences. With a strong background in both Android and iOS development, as well as front-end web technologies, I thrive in the intersection where creativity meets technology.
-
-      Over the years, I’ve honed my skills in building robust, user-friendly applications that not only meet the needs of users but also push the boundaries of what’s possible. My projects range from innovative mobile applications to responsive web designs, all with a focus on performance, security, and scalability.
+      I'm Ma'Nye Wade, a junior cybersecurity professional pursuing a B.S. in Cybersecurity: Cyber Operations and an M.S. in Cyber Risk Management and Compliance at the University at Albany. 
+      
+      With hands-on experience in threat detection, vulnerability management, network infrastructure assessment, and security awareness, I build and defend systems from the ground up. 
+      
+      I'm passionate about solving complex security challenges and am actively seeking opportunities where I can grow, contribute, and make an impact.
     `,
-    image: "/alejandro-big.jpg",
+    image: "/nye-big.png",
   },
 };
 
