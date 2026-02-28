@@ -24,7 +24,7 @@ export const SITE_CONFIG: SiteConfig = {
 export const SITE_CONTENT: SiteContent = {
   hero: {
     name: "Ma'Nye Wade",
-    specialty: "Ma'Nye Wade — Cybersecurity Professional",
+    specialty: "Cybersecurity Professional",
     summary:
       "Cybersecurity professional based in New York, specializing in Cyber Operations, Network Defense, Threat Detection, and Incident Response.",
     email: "nyebusiness@protonmail.com",
