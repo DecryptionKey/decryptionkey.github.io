@@ -17,8 +17,8 @@ export const SITE_CONFIG: SiteConfig = {
     { text: "Github", href: "https://github.com/decryptionkey" },
     { text: "Resume", href: "https://drive.google.com/file/d/1hES5tdXZK-vKiQKT6LPTTinFGzw38Wpt/view?usp=sharing"},
   ],
-  socialImage: "/zen-og.png",
-  canonicalURL: "https://astro-zen.vercel.app",
+  socialImage: "/preview.png",
+  canonicalURL: "https://manyewade.com",
 };
 
 export const SITE_CONTENT: SiteContent = {
