@@ -1,0 +1,86 @@
+{{ define "header_css" }}{{ end }}
+{{ define "body_classes" }}page-home{{ end }}
+{{ define "header_classes" }}{{ end }}
+
+{{ define "main" }}
+    <div class="section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <section class="home-hero">
+                        <div class="home-hero-copy">
+                            {{ with .Params.hero.badge }}
+                                <p class="home-hero-badge">{{ . }}</p>
+                            {{ end }}
+                            <h1>{{ .Title | safeHTML }}</h1>
+                            {{ with .Params.hero.intro }}
+                                <p class="home-hero-intro">
+                                    <span class="home-hero-typed" data-text="{{ . }}"></span>
+                                </p>
+                            {{ end }}
+                            {{ with .Params.hero.description_lead }}
+                                <p class="home-hero-description-lead">{{ . }}</p>
+                            {{ end }}
+                            <p class="home-hero-description">{{ .Description | safeHTML }}</p>
+                            <div class="home-hero-actions">
+                                <a class="button" href="{{ .Params.hero.actions.primary_link }}">{{ .Params.hero.actions.primary_text }}</a>
+                                <a class="button button-outline" href="{{ .Params.hero.actions.secondary_link }}">{{ .Params.hero.actions.secondary_text }}</a>
+                            </div>
+                            <div class="home-hero-chips">
+                                {{ range .Params.hero.chips }}
+                                    <span>{{ . }}</span>
+                                {{ end }}
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {{ $projects := where .Site.RegularPages "Section" "projects" }}
+    {{ $limit := .Params.projects.limit }}
+    {{ $sort_by := .Params.projects.sort | default "weight" }}
+    {{ $sorted_projects := $projects.ByWeight }}
+    {{ if eq $sort_by "date" }}{{ $sorted_projects = $projects.ByDate.Reverse }}{{ end }}
+    {{ $columns:= .Params.projects.columns | default 3 }}
+    {{ if gt $sorted_projects.Len 0 }}
+    <div class="section pt-0">
+        <div class="container">
+            <div class="row">
+                {{ partial "framework/grid/grid-header.html" (dict "heading" .Params.projects.heading "sub_heading" .Params.projects.sub_heading "align" .Params.projects.align) }}
+                {{ range $index, $card := first $limit $sorted_projects }}
+                    <div class="col-12 col-md-6 col-lg-{{ div 12 $columns }} mb-gutter mt-gutter {{ if eq $index 0 }}mt-0{{ else if eq $index (sub (len (first $limit $sorted_projects)) 1) }} mb-0{{ end }} mt-md-0">
+                        {{ partial "theme/summary-project.html" (dict "page" $card ) }}
+                    </div>
+                {{ end }}
+                {{ partial "framework/grid/grid-footer.html" (dict "view_more_button_text" .Params.projects.view_more_button_text "view_more_button_link" .Params.projects.view_more_button_link)}}
+            </div>
+        </div>
+    </div>
+    {{ end }}
+
+    {{ $posts := where .Site.RegularPages "Section" "posts" }}
+    {{ $limit := .Params.posts.limit }}
+    {{ $sort_by := .Params.posts.sort | default "date" }}
+    {{ $sorted_posts := $posts.ByDate.Reverse }}
+    {{ if eq $sort_by "weight" }}{{ $sorted_posts = $posts.ByWeight }}{{ end }}
+    {{ $postColumns:= .Params.posts.columns | default 3 }}
+    {{ if gt $sorted_posts.Len 0 }}
+    <div class="section section-base-bg-2">
+        <div class="container">
+          <div class="row">
+                {{ partial "framework/grid/grid-header.html" (dict "heading" .Params.posts.heading "sub_heading" .Params.posts.sub_heading) }}
+                {{ range $index, $card := first $limit $sorted_posts }}
+                    <div
+                        class="col-12 col-md-6 col-lg-{{ div 12 $postColumns }} mb-gutter mt-gutter {{ if eq $index 0 }}mt-0{{ else if eq $index (sub (len (first $limit $sorted_posts)) 1) }} mb-0{{ end }} mt-md-0">
+                        {{ partial "theme/summary-post.html" (dict "page" $card "thumbnail" $card.Params.thumbnail "date" $card.Date "show_read_more" true "taxononies" "categories") }}
+                    </div>
+                {{ end }}
+                {{ partial "framework/grid/grid-footer.html" (dict "view_more_button_text" .Params.posts.view_more_button_text "view_more_button_link" .Params.posts.view_more_button_link)}}
+            </div>
+        </div>
+    </div>
+    {{ end }}
+
+{{ end }}

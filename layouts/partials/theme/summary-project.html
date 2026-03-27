@@ -1,0 +1,44 @@
+{{ $icon:= .icon }}
+{{ $fa_icon:= .fa_icon }}
+{{ $style:= .style }}
+{{ $thumbnail_size:= .thumbnail_size }}
+{{ $params:= .page.Params }}
+{{ $url:= .page.RelPermalink }}
+{{ $title:= .page.Title }}
+
+<div class="summary summary-project summary-{{ $style }} {{ if $params.thumbnail }}summary-has-thumbnail{{ end }} {{ if and $icon $fa_icon }}summary-has-icon{{ end }}">
+
+  {{ with $params.thumbnail }}
+    <div class="summary-thumbnail {{ if $thumbnail_size }}summary-thumbnail-{{ $thumbnail_size }}{{ end }}{{ with $params.thumbnail_display }} summary-thumbnail-{{ . }}{{ end }}">
+      <a href="{{ $url }}"><img alt="{{ $title }}" src="{{ . | relURL }}"/></a>
+    </div>
+  {{ end }}
+
+  <div class="summary-content">
+    {{ with $params.categories }}
+      <div class="summary-categories">
+        {{ range first 2 . }}
+          <span class="summary-category">{{ . }}</span>
+        {{ end }}
+      </div>
+    {{ end }}
+    <div class="summary-title">
+      <h2>
+        {{ $title }}
+      </h2>
+    </div>
+    {{ with $params.client}}  
+      <span class="summary-client">
+        {{ . }}
+      </span>
+    {{ end }}
+    {{ with $params.description }}
+      <div class="summary-description">
+        <p>{{ . }}</p>
+      </div>
+    {{ end }}
+    <div class="summary-readmore">
+      <a href="{{ $url }}">View Project</a>
+    </div>
+  </div>
+</div>

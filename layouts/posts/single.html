@@ -1,0 +1,54 @@
+{{ define "header_css" }}{{ end }}
+{{ define "body_classes" }}page-posts-single{{ end }}
+{{ define "header_classes" }}{{ end }}
+
+{{ define "main" }}
+<div class="section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        {{ partial "framework/sections/heading/heading.html" (dict "title" .Title "description" .Description "image" .Params.image
+        "align" "center") }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section pt-0">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-8">
+        {{ if .Params.authors }}
+          <div class="mb-2">
+            {{ partial "framework/blog/post-author.html" . }}
+          </div>
+        {{ end }}
+
+        <div class="content">{{ .Content }}</div>
+
+        {{ with .Params.categories }}
+        <div class="categories">
+          {{ partial "framework/components/categories-badges.html" (dict "categories" . ) }}
+        </div>
+        {{ end }}
+
+        {{ partial "framework/components/comments.html" . }}
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{{ if ne .Site.Params.newsletter.mailchimp.form_action_url "" }}
+<div class="section bg-section-base-bg-2">
+  <div class="container">
+    <div class="row">
+      <div class="col-12"></div>
+      {{ partial "framework/sections/subscribe/subscribe.html" . }}
+    </div>
+  </div>
+</div>
+</div>
+{{ end }}
+
+{{ end }}

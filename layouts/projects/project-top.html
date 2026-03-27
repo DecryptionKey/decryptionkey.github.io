@@ -1,0 +1,65 @@
+{{ define "header_css" }}{{ end }}
+{{ define "body_classes" }}page-projects page-projects-top{{ end }}
+{{ define "header_classes" }}{{ end }}
+
+{{ define "main" }}
+{{$limit:= .Params.gallery_limit | default 6 }}
+
+<div class="section">
+  <div class="container">
+    {{ if .Params.gallery }}      
+      <div class="row mb-6">
+        <div class="col">
+          <div class="gallery gallery-two-column">
+            {{ range first $limit .Params.gallery }}
+            <div class="gallery-item">
+              <div class="gallery-image"><img src="{{ .image | relURL }}" /></div>
+              {{ with .caption }}
+              <div class="gallery-caption">{{ . | safeHTML }}</div>
+              {{ end }}
+            </div>
+            {{ end }}
+          </div>
+        </div>
+      </div>
+    {{ end }}
+    <div class="row">
+      <div class="col-12 col-md-6">
+        {{ with .Title }}
+        <div class="project-heading">
+          <h1>{{ . }}</h1>
+        </div>
+        {{ end }}
+        {{ with .Params.categories }}
+        <div class="project-categories">
+          {{ partial "framework/components/categories-badges.html" (dict "categories" . ) }}
+        </div>
+        {{ end }}
+        {{ with .Date }}
+        {{ $dateFormat := default "Jan 2, 2006" (index site.Params "date_format") }}
+        <div class="project-date">
+          <strong>Date </strong><span>{{ .Format $dateFormat }}</span>
+        </div>
+        {{ end }}
+
+        {{ with .Params.client }}
+        <div class="project-client">
+          <strong>Client </strong><span>{{ . }}</span>
+        </div>
+        {{ end }}
+
+        {{ with .Params.role }}
+        <div class="project-role">
+          <strong>Role </strong><span>{{ . }}</span>
+        </div>
+        {{ end }}
+
+      </div>
+
+      <div class="col-12 col-md-6 mb-4">
+        <div class="content">{{ .Content }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+{{ end }}

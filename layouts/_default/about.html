@@ -1,0 +1,122 @@
+{{ define "header_css" }}{{ end }}
+{{ define "body_classes" }}page-about{{ end }}
+{{ define "header_classes" }}{{ end }}
+
+{{ define "main" }}
+  <div class="section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+          {{ partial "framework/sections/title/title.html" (dict "title" .Title "description" .Description) }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section pt-0">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+          <div class="about-page">
+            <section class="about-intro">
+              <div class="about-profile">
+                <img class="about-profile-image" src="{{ .Params.about.intro.image | relURL }}" alt="Portrait of Ma'Nye Wade">
+              </div>
+              <div class="about-copy">
+                <p class="about-eyebrow">{{ .Params.about.intro.eyebrow }}</p>
+                <h2>{{ .Params.about.intro.heading }}</h2>
+                {{ range .Params.about.intro.paragraphs }}
+                  <p>{{ . }}</p>
+                {{ end }}
+                <div class="about-tags">
+                  {{ range .Params.about.intro.tags }}
+                    <span>{{ . }}</span>
+                  {{ end }}
+                </div>
+              </div>
+            </section>
+
+            <section class="about-panel">
+              <div class="about-section-header">
+                <div>
+                  <p class="about-eyebrow">{{ .Params.about.education.eyebrow }}</p>
+                  <h2>{{ .Params.about.education.heading }}</h2>
+                </div>
+                <div class="about-logo-wrap about-logo-wrap-education">
+                  <img class="about-logo-light" src="{{ .Params.about.education.logo_light }}" alt="{{ .Params.about.education.logo_alt }}">
+                  <img class="about-logo-dark" src="{{ .Params.about.education.logo_dark }}" alt="{{ .Params.about.education.logo_alt }}">
+                </div>
+              </div>
+
+              <div class="about-card-grid">
+                {{ range .Params.about.education.items }}
+                  <article class="about-card">
+                    <h3>{{ .title }}</h3>
+                    <p class="about-meta">{{ .meta }}</p>
+                    {{ with .bullets }}
+                      <ul>
+                        {{ range . }}
+                          <li>{{ . | safeHTML }}</li>
+                        {{ end }}
+                      </ul>
+                    {{ end }}
+                  </article>
+                {{ end }}
+              </div>
+            </section>
+
+            <section class="about-panel">
+              <div class="about-section-header">
+                <div>
+                  <p class="about-eyebrow">{{ .Params.about.experience.eyebrow }}</p>
+                  <h2>{{ .Params.about.experience.heading }}</h2>
+                </div>
+                <div class="about-logo-wrap about-logo-wrap-work">
+                  <img src="{{ .Params.about.experience.logo }}" alt="{{ .Params.about.experience.logo_alt }}">
+                </div>
+              </div>
+
+              <div class="about-card-grid about-card-grid-single">
+                {{ range .Params.about.experience.roles }}
+                  <article class="about-card">
+                    <div class="about-role-heading">
+                      <div>
+                        <h3>{{ .title }}</h3>
+                        <p class="about-meta">{{ .meta }}</p>
+                      </div>
+                    </div>
+                    <ul>
+                      {{ range .bullets }}
+                        <li>{{ . }}</li>
+                      {{ end }}
+                    </ul>
+                  </article>
+                {{ end }}
+              </div>
+            </section>
+
+            <section class="about-panel about-skills-panel">
+              <p class="about-eyebrow">{{ .Params.about.skills.eyebrow }}</p>
+              <h2>{{ .Params.about.skills.heading }}</h2>
+              <div class="about-skills-grid">
+                {{ range .Params.about.skills.items }}
+                  <span class="about-skill">{{ . }}</span>
+                {{ end }}
+              </div>
+            </section>
+
+            <section class="about-panel about-cta">
+              <p class="about-eyebrow">{{ .Params.about.cta.eyebrow }}</p>
+              <h2>{{ .Params.about.cta.heading }}</h2>
+              <p>{{ .Params.about.cta.text }}</p>
+              <div class="about-actions">
+                <a class="button" href="{{ .Params.about.cta.primary.url }}" target="_blank" rel="noreferrer">{{ .Params.about.cta.primary.text }}</a>
+                <a class="button button-outline" href="{{ .Params.about.cta.secondary.url }}">{{ .Params.about.cta.secondary.text }}</a>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{{ end }}

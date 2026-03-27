@@ -1,0 +1,207 @@
+<form id="fs-frm" name="simple-contact-form" accept-charset="utf-8" action="{{ .Site.Params.contact_form.formspree_endpoint }}" method="post">
+  <fieldset id="fs-frm-inputs">
+    <label for="full-name">Full Name</label>
+    <input type="text" name="name" id="full-name" placeholder="First and Last" required="">
+    <label for="email-address">Email Address</label>
+    <input type="email" name="_replyto" id="email-address" placeholder="email@domain.tld" required="">
+    <label for="message">Message</label>
+    <textarea rows="5" name="message" id="message" placeholder="Aenean lacinia bibendum nulla sed consectetur. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Donec ullamcorper nulla non metus auctor fringilla nullam quis risus." required=""></textarea>
+    <input type="hidden" name="_subject" id="email-subject" value="Contact Form Submission">
+  </fieldset>
+  <div class="fs-frm-actions">
+    <input type="submit" class="button" value="{{ .Params.contact.button_text | default "Submit" }}">
+    <p id="fs-frm-status" class="fs-frm-status" aria-live="polite"></p>
+  </div>
+</form>
+<script>
+  (function () {
+    const form = document.getElementById('fs-frm');
+    if (!form) return;
+
+    const status = document.getElementById('fs-frm-status');
+    const submit = form.querySelector('input[type="submit"]');
+
+    form.addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      if (!submit) return;
+
+      submit.disabled = true;
+      submit.value = 'Sending...';
+      status.textContent = '';
+      status.className = 'fs-frm-status';
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: {
+            Accept: 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Submission failed');
+        }
+
+        form.reset();
+        status.textContent = 'Thanks. Your message was sent successfully.';
+        status.className = 'fs-frm-status fs-frm-status-success';
+      } catch (error) {
+        status.textContent = 'Something went wrong. Please try again.';
+        status.className = 'fs-frm-status fs-frm-status-error';
+      } finally {
+        submit.disabled = false;
+        submit.value = '{{ .Params.contact.button_text | default "Submit" }}';
+      }
+    });
+  })();
+</script>
+<style>/* reset */
+
+#fs-frm input,
+#fs-frm select,
+#fs-frm textarea,
+#fs-frm fieldset,
+#fs-frm optgroup,
+#fs-frm label,
+#fs-frm #card-element:disabled {
+  font-family: inherit;
+  font-size: 100%;
+  color: inherit;
+  border: none;
+  border-radius: 0;
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+#fs-frm label,
+#fs-frm legend,
+#fs-frm ::placeholder {
+  margin-bottom: .5rem;
+  padding-top: .2rem;
+  display: flex;
+  align-items: baseline;
+}
+
+/* border, padding, margin, width */
+#fs-frm input,
+#fs-frm select,
+#fs-frm textarea,
+#fs-frm #card-element {
+  border: 1px solid rgba(0,0,0,0.2);
+  background-color: rgba(255,255,255,0.9);
+  color: #18324d;
+  padding: .75em 1rem;
+  margin-bottom: 1.5rem;
+}
+#fs-frm input:focus,
+#fs-frm select:focus,
+#fs-frm textarea:focus {
+  background-color: white;
+  color: #18324d;
+  outline-style: solid;
+  outline-width: thin;
+  outline-color: gray;
+  outline-offset: -1px;
+}
+#fs-frm input::placeholder,
+#fs-frm textarea::placeholder {
+  color: #6f88a3;
+  opacity: 1;
+}
+#fs-frm [type="text"],
+#fs-frm [type="email"] {
+  width: 100%;
+}
+#fs-frm [type="button"],
+#fs-frm [type="submit"],
+#fs-frm [type="reset"] {
+  width: auto;
+  cursor: pointer;
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+}
+#fs-frm [type="button"]:focus,
+#fs-frm [type="submit"]:focus,
+#fs-frm [type="reset"]:focus {
+  outline: none;
+}
+#fs-frm [type="submit"],
+#fs-frm [type="reset"] {
+  margin-bottom: 0;
+}
+#fs-frm .fs-frm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+}
+#fs-frm [type="submit"] {
+  border: 1px solid transparent;
+  background: var(--color-primary-bg);
+  color: var(--color-primary-text);
+  font-weight: 600;
+  padding: .8rem 1.4rem;
+  border-radius: var(--button-border-radius);
+}
+#fs-frm [type="submit"]:hover {
+  background: var(--color-primary-bg-2);
+  color: var(--color-primary-text);
+}
+#fs-frm [type="submit"]:disabled {
+  opacity: 0.75;
+  cursor: wait;
+}
+#fs-frm .fs-frm-status {
+  margin: 0;
+  font-size: 0.98rem;
+  color: var(--color-base-text-2);
+}
+#fs-frm .fs-frm-status-success {
+  color: #2d7a46;
+}
+#fs-frm .fs-frm-status-error {
+  color: #a33a3a;
+}
+#fs-frm select {
+  text-transform: none;
+}
+
+#fs-frm [type="checkbox"] {
+  -webkit-appearance: checkbox;
+  -moz-appearance: checkbox;
+  appearance: checkbox;
+  display: inline-block;
+  width: auto;
+  margin: 0 .5em 0 0 !important;
+}
+
+#fs-frm [type="radio"] {
+  -webkit-appearance: radio;
+  -moz-appearance: radio;
+  appearance: radio;
+}
+
+/* address, locale */
+#fs-frm fieldset.locale input[name="city"],
+#fs-frm fieldset.locale select[name="state"],
+#fs-frm fieldset.locale input[name="postal-code"] {
+  display: inline;
+}
+#fs-frm fieldset.locale input[name="city"] {
+  width: 52%;
+}
+#fs-frm fieldset.locale select[name="state"],
+#fs-frm fieldset.locale input[name="postal-code"] {
+  width: 20%;
+}
+#fs-frm fieldset.locale input[name="city"],
+#fs-frm fieldset.locale select[name="state"] {
+  margin-right: 3%;
+}
+</style>

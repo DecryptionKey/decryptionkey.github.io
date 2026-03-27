@@ -1,0 +1,73 @@
+{{ $icon:= .icon }}
+{{ $fa_icon:= .fa_icon }}
+{{ $style:= .style }}
+{{ $thumbnail_size:= .thumbnail_size }}
+{{ $show_read_more:= .show_read_more }}
+{{ $thumbnail:= .thumbnail }}
+{{ $author:= .author }}
+{{ $date:= .date }}
+{{ $client:= .client }}
+{{ $taxononies:= .taxononies }}
+
+{{ $params:= .page.Params }}
+{{ $url:= .page.RelPermalink }}
+{{ $title:= .page.Title }}
+
+<div class="summary summary-post summary-{{ $style }} {{ if $thumbnail }}summary-has-thumbnail{{ end }} {{ if and $icon $fa_icon }}summary-has-icon{{ end }}">
+
+  {{ with $thumbnail }}
+    <div class="summary-thumbnail {{ if $thumbnail_size }}summary-thumbnail-{{ $thumbnail_size }}{{ end }}">
+      <a href="{{ $url }}"><img alt="{{ $title }}" src="{{ . | relURL }}"/></a>
+    </div>
+  {{ end }}
+
+  <div class="summary-content">
+    {{ with $author }}
+      <div class="summary-authors">
+        {{ range . }}
+          {{ partial "theme/author.html" (dict "name" .) }}
+        {{ end }}
+      </div>
+    {{ end }}
+    {{ with $date }}
+      <div class="summary-date">
+        <span class="post-date-date">{{ .Format "2 Jan 2006" }}</span>
+      </div>
+    {{ end }}
+
+    <div class="summary-title">
+      <h3>
+        <a href="{{ $url }}">{{ $title }}</a>
+      </h3>
+    </div>
+
+    {{ with $client }}
+      <span class="summary-client">
+        {{ . }}
+      </span>
+    {{ end }}
+
+    {{ with .page.Description }}
+      <div class="summary-description">
+        <p>{{ . }}</p>
+      </div>
+    {{ end }}
+    {{ if $taxononies }}
+      {{ $terms := .page.GetTerms $taxononies }}
+      {{ if gt (len $terms) 0 }}
+        <div class="summary-categories">
+          {{ range $terms }}
+            <a class="summary-category" href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+          {{ end }}
+        </div>
+      {{ end }}
+    {{ end }}
+
+    {{ if $show_read_more  }}
+      <div class="summary-readmore">
+        <a href="{{ $url }}">Read More<i class="fas fa-long-arrow-alt-right"></i>
+        </a>
+      </div>
+    {{ end }}
+  </div>
+</div>

@@ -1,0 +1,250 @@
+baseURL: "https://manyewade.com"
+title: Ma'Nye Wade
+
+pagination:
+  pagerSize: 6
+
+enableGitInfo: false
+pygmentsCodeFences: true
+pygmentsCodefencesGuessSyntax: true
+pygmentsUseClasses: true
+metaDataFormat: yaml
+languageCode: "en-us"
+defaultContentLanguage: en
+defaultContentLanguageInSubdir: false
+
+params:
+  colors:
+    # light
+    base_bg: "#f5f9ff"
+    base_bg_2: "#e6eff8"
+    base_bg_3: "#d4e2f1"
+    base_text: "#18324d"
+    base_text_2: "#4e6985"
+    primary_bg: "#315f8c"
+    primary_bg_2: "#406f9d"
+    primary_bg_3: "#557fa9"
+    primary_text: "#f5f9ff"
+    header_text: "#18324d"
+    logo_text: "#18324d"
+    hero_gradient: "#f5f9ff"
+    hero_gradient_2: "#e6eff8"
+
+    # dark
+    base_bg_dark: "#10233a"
+    base_bg_2_dark: "#18324d"
+    base_bg_3_dark: "#254566"
+    base_text_dark: "#e8f1fb"
+    base_text_2_dark: "#aebfd3"
+    primary_bg_dark: "#d4e2f1"
+    primary_bg_2_dark: "#bfd4ea"
+    primary_bg_3_dark: "#a6c2df"
+    primary_text_dark: "#10233a"
+    header_text_dark: "#e8f1fb"
+    logo_text_dark: "#e8f1fb"
+    hero_gradient_dark: "#10233a"
+    hero_gradient_2_dark: "#18324d"
+
+  fonts:
+    use_google_fonts: false
+    google_fonts_url: "https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,500;9..40,700&family=Fira+Mono&display=swap"
+    use_self_hosted_fonts: true # font files must be placed in /static/fonts folder and the @font-face definitions must be added to /static/fonts/fonts.css
+    heading: "'DM Sans'"
+    base: "'DM Sans'"
+    monospace: "'Fira Mono'"
+    logo: "'DM Sans'"
+
+  logo:
+    logo_text: "Ma'Nye Wade"
+    logo_image_desktop: images/logo/logo.png
+    logo_image_mobile: images/logo/logo-mobile.png
+    logo_image_desktop_invert: images/logo/logo-invert.png
+    logo_image_mobile_invert: images/logo/logo-invert-mobile.png
+    logo_image_desktop_height: "90px"
+    logo_image_desktop_width: "90px"
+    logo_image_mobile_height: "70px"
+    logo_image_mobile_width: "70px"
+    show_logo_image_on_mobile: true
+    show_logo_image_on_desktop: true
+    show_logo_text_on_mobile: false
+    show_logo_text_on_desktop: false
+    logo_text_font_size: "28px"
+    logo_text_font_weight: "500"
+
+  header:
+    fixed: false
+    header_height: "60px"
+    header_menu_font_size: "18px"
+
+  open_graph:
+    og_type: "website"
+    og_twitter_card: "summary_large_image"
+    og_twitter_site: ""
+    og_twitter_creator: ""
+
+  dark_mode:
+    enable_dark_mode: true
+    show_dark_mode_toggle_in_header: true
+    show_dark_mode_toggle_in_bottom: false
+    show_dark_mode_toggle_in_mobile_menu: true
+
+  cookie_banner:
+    enabled: true
+    show_manage_cookies_at_bottom: true
+
+  analytics:
+    disable_analytics_on_localhost: false # prevents polluting analytics data while developing but enabling can be useful
+    google_analytics_id: "G-NS2MEHX6EZ" # G-XXXXXXXXXX
+    gtm_id: "" # GTM-XXXXXXXX
+    plausible_data_domain: "" # mywebsite.com
+    plausible_script_url: "" # if you use a self-hosted plausible enter the url
+    umami_data_website_id: "" # ddd14336-5fb0-4cdd-8f32-e1bfa906cc2b
+    umami_src: "" # https://analytics.eu.umami.is/script.js
+  
+  comments:
+    commento:
+      enabled: false # you must have a commento account and be on the correct domain. does not work locally.
+    disqus:
+      shortname: "" # Your Disqus shortname. Leave blank to disable.
+
+  newsletter:
+    mailchimp:
+      form_action_url:
+      form_title: ""
+
+  contact_form:
+    use_netlify_form: false
+    use_formspree_form: true
+    formspree_endpoint: https://formspree.io/f/xkopgnqn
+    netlify_form_name: "contact"
+
+  multilingual:
+    enable_language_switcher: false
+    show_language_switcher_in_header: false
+
+  menu:
+    show_dropdown_items_in_mobile_menu: false
+    show_social_media_in_mobile_menu: true
+
+  footer:
+    enable_footer: true # show/hide the entire footer
+    enable_footer_info: true # will show the section with the logo, title and description.
+    footer_title: "Ma'Nye Wade"
+    footer_logo: ""
+    footer_logo_height: "32px"
+    footer_logo_width: "32px"
+    footer_description: "Cybersecurity portfolio featuring projects, writing, and practical security work across defensive operations and systems hardening."
+    footer_cta_primary_text: "Download Resume"
+    footer_cta_primary_link: "https://drive.google.com/file/d/1IRj0oELr2tT4DxiTrz-egFwhtyKH2Wls/view?usp=sharing"
+    footer_cta_secondary_text: "Get In Touch"
+    footer_cta_secondary_link: "/contact"
+    enable_social_media_links: true
+    enable_languages: false
+    enable_copyright: false
+    enable_menu_footer_primary: true
+    enable_menu_footer_secondary: true
+    enable_menu_footer_tertiary: false
+    footer_primary_menu_title: "Projects"
+    footer_secondary_menu_title: "Navigation"
+    footer_tertiary_menu_title: "Support"
+
+  bottom:
+    enabled: false # show/hide the entire bottom (below the footer)
+    enable_bottom_menu: true # if enabled, the bottom menu can be edited in `_data/menu.yml`
+    copyright_text: "© 2026 Ma'Nye Wade"
+    show_rss_icon: true
+
+menu:
+  main:
+    - name: Home
+      pageRef: /
+      weight: 1
+    - name: Projects
+      pageRef: projects
+      weight: 2
+      # Projects dropdown menu
+    - name: "Patch Management & System Hardening"
+      pageRef: projects/project-1
+      parent: Projects
+      weight: 1
+      params:
+        icon: "images/icons/wireframe-5.svg"
+        icon_darkmode: "images/icons/wireframe-5-white.svg"
+        description: "Ubuntu system hardening via CIS Benchmarks."
+    - name: "Account Management & Authentication Policies"
+      pageRef: projects/project-2
+      parent: Projects
+      weight: 2
+      params:
+        icon: "images/icons/wireframe-6.svg"
+        icon_darkmode: "images/icons/wireframe-6-white.svg"
+        description: "Least privilege and PAM password enforcement."
+    - name: "File Systems, Storage & Backup Security"
+      pageRef: projects/project-3
+      parent: Projects
+      weight: 3
+      params:
+        icon: "images/icons/wireframe-5.svg"
+        icon_darkmode: "images/icons/wireframe-5-white.svg"
+        description: "LUKS encryption, permissions, and backup recovery."
+    - name: "RSS to SharePoint News"
+      pageRef: projects/project-4
+      parent: Projects
+      weight: 4
+      params:
+        icon: "images/icons/wireframe-7.svg"
+        icon_darkmode: "images/icons/wireframe-7-white.svg"
+        description: "Automated RSS to SharePoint News pipeline."
+    - name: Blog
+      pageRef: posts
+      weight: 3
+    - name: About
+      pageRef: about
+      weight: 4
+    - name: Contact
+      url: /contact
+      weight: 5
+  footer_primary:
+    - name: "Patch Management & System Hardening"
+      pageRef: projects/project-1
+      weight: 1
+    - name: "Account Management & Authentication Policies"
+      pageRef: projects/project-2
+      weight: 2
+    - name: "File Systems, Storage & Backup Security"
+      pageRef: projects/project-3
+      weight: 3
+    - name: "RSS to SharePoint News"
+      pageRef: projects/project-4
+      weight: 4
+  footer_secondary:
+    - name: Blog
+      pageRef: posts
+      weight: 1
+    - name: About
+      pageRef: about
+      weight: 2
+    - name: Contact
+      pageRef: contact
+      weight: 3
+  bottom:
+    - name: Privacy Policy
+      pageRef: privacy-policy
+      weight: 1
+    - name: Terms and Conditions
+      pageRef: terms-and-conditions
+      weight: 2
+
+permalinks:
+  posts: "blog/:year/:month/:title/"
+  pages: ":slug/"
+
+taxonomies:
+  tag: tags
+  category: categories
+  author: authors
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
