@@ -1,9 +1,14 @@
 import { copyFile, mkdir, readFile, readdir, writeFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
 import { dirname } from "node:path";
 
 const basePath = (process.env.PAGES_BASE_PATH ?? "").replace(/\/$/, "");
 const workerUrl = new URL("../dist/server/index.js", import.meta.url);
 workerUrl.searchParams.set("export", Date.now().toString());
+const staticScriptVersion = createHash("sha256")
+  .update(await readFile("public/static.js"))
+  .digest("hex")
+  .slice(0, 12);
 
 const { default: worker } = await import(workerUrl.href);
 const blogDirectories = (await readdir("app/blog", { withFileTypes: true }))
@@ -28,7 +33,7 @@ function prepareHtml(source) {
     .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
     .replace(/<link\b[^>]*rel=["']modulepreload["'][^>]*\/?>/gi, "")
     .replace("</head>", `${productionSecurityMetadata}\n</head>`)
-    .replace("</body>", `<script src="${basePath}/static.js" defer></script></body>`);
+    .replace("</body>", `<script src="${basePath}/static.js?v=${staticScriptVersion}" defer></script></body>`);
 
   if (basePath) {
     html = html

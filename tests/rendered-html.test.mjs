@@ -106,7 +106,7 @@ test("GitHub Pages export is fully static", async () => {
   const staticScript = await readFile(new URL("../dist/client/static.js", import.meta.url), "utf8");
   const blogHtml = await readFile(new URL("../dist/client/blog/index.html", import.meta.url), "utf8");
   const articleHtml = await readFile(new URL("../dist/client/blog/ubuntu-security-baseline/index.html", import.meta.url), "utf8");
-  assert.match(html, /static\.js/);
+  assert.match(html, /static\.js\?v=[a-f0-9]{12}/);
   assert.match(staticScript, /initIdentityUnlock/);
   assert.match(staticScript, /--identity-scan-progress/);
   assert.match(staticScript, /--identity-portrait-opacity/);
