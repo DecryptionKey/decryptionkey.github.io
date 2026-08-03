@@ -162,6 +162,7 @@ test("GitHub Pages export is fully static", async () => {
   assert.doesNotMatch(pageBundle, /localhost:3000/);
   await readFile(new URL("../dist/client/media/certifications/fema.png", import.meta.url));
   await readFile(new URL("../dist/client/media/manye-wade-headshot.png", import.meta.url));
+  assert.equal((await readFile(new URL("../dist/client/CNAME", import.meta.url), "utf8")).trim(), "manyewade.com");
   for (const technologyLogo of ["aws.svg", "azure.svg", "gcp.svg", "wiz.svg", "docker.svg", "linux-mark.svg", "bash.svg", "jira.svg", "slack.svg"]) {
     await readFile(new URL(`../dist/client/media/skills/${technologyLogo}`, import.meta.url));
   }
