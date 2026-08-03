@@ -68,6 +68,7 @@ for (const route of routes) {
 }
 
 await copyFile(routes[0].output, "dist/client/404.html");
+await copyFile("CNAME", "dist/client/CNAME");
 await writeFile("dist/client/.nojekyll", "");
 
 console.log(`GitHub Pages export ready at dist/client${basePath ? ` (base path: ${basePath})` : ""}`);
