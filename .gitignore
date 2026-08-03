@@ -1,0 +1,16 @@
+# Dependencies
+/node_modules/
+
+# Build and test output
+/.next/
+/.vinext/
+/dist/
+/coverage/
+/.wrangler/
+
+# Local configuration and logs
+.env*
+*.log
+
+# Operating system files
+.DS_Store
