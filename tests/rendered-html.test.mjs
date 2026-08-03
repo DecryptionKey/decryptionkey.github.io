@@ -103,9 +103,13 @@ test("renders the Ubuntu security baseline article", async () => {
 
 test("GitHub Pages export is fully static", async () => {
   const html = await readFile(new URL("../dist/client/index.html", import.meta.url), "utf8");
+  const staticScript = await readFile(new URL("../dist/client/static.js", import.meta.url), "utf8");
   const blogHtml = await readFile(new URL("../dist/client/blog/index.html", import.meta.url), "utf8");
   const articleHtml = await readFile(new URL("../dist/client/blog/ubuntu-security-baseline/index.html", import.meta.url), "utf8");
   assert.match(html, /static\.js/);
+  assert.match(staticScript, /initIdentityUnlock/);
+  assert.match(staticScript, /--identity-scan-progress/);
+  assert.match(staticScript, /--identity-portrait-opacity/);
   assert.match(html, /Content-Security-Policy/);
   assert.match(html, /form-action https:\/\/formsubmit\.co/);
   assert.match(html, /strict-origin-when-cross-origin/);

@@ -5,7 +5,8 @@
     const backToTop = document.querySelector(".back-to-top");
     const menuButton = document.querySelector(".menu-button");
     const mobileNav = document.querySelector(".mobile-nav");
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduceMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const reduceMotion = reduceMotionQuery.matches;
 
     const initHeroMesh = () => {
       const canvas = document.querySelector("#hero-mesh-canvas");
@@ -215,6 +216,57 @@
         window.addEventListener("scroll", scheduleRender, { passive: true });
         build();
       });
+    };
+
+    const initIdentityUnlock = () => {
+      const root = document.querySelector(".identity-unlock");
+      if (!root) return;
+
+      let frame = 0;
+      const clamp = (value) => Math.max(0, Math.min(1, value));
+      const range = (value, start, end) => clamp((value - start) / (end - start));
+      const ease = (value) => 1 - ((1 - value) ** 3);
+
+      const render = () => {
+        frame = 0;
+        const rect = root.getBoundingClientRect();
+        const scrollRange = Math.max(1, root.offsetHeight - window.innerHeight);
+        const rawProgress = clamp(-rect.top / scrollRange);
+        const progress = reduceMotionQuery.matches ? .74 : rawProgress;
+        const titleProgress = ease(range(progress, .02, .16));
+        const cardProgress = ease(range(progress, .08, .22));
+        const scanProgress = range(progress, .14, .3);
+        const verifiedProgress = ease(range(progress, .26, .34));
+        const copyProgress = ease(range(progress, .2, .32));
+        const portraitProgress = reduceMotionQuery.matches ? 0 : ease(range(progress, .34, .54));
+        const exitProgress = reduceMotionQuery.matches ? 0 : ease(range(progress, .78, .98));
+        const titleLift = titleProgress * Math.min(270, window.innerHeight * .31);
+
+        root.style.setProperty("--identity-title-y", `${-titleLift}px`);
+        root.style.setProperty("--identity-card-opacity", `${cardProgress * (1 - exitProgress)}`);
+        root.style.setProperty("--identity-card-y", `${(1 - cardProgress) * 72 - exitProgress * 54}px`);
+        root.style.setProperty("--identity-card-scale", `${.82 + cardProgress * .18 - exitProgress * .05}`);
+        root.style.setProperty("--identity-scan-progress", `${scanProgress}`);
+        root.style.setProperty("--identity-scan-opacity", `${scanProgress > 0 && scanProgress < .98 ? 1 : 0}`);
+        root.style.setProperty("--identity-verified-opacity", `${verifiedProgress}`);
+        root.style.setProperty("--identity-copy-opacity", `${copyProgress * (1 - exitProgress)}`);
+        root.style.setProperty("--identity-copy-y", `${(1 - copyProgress) * 30}px`);
+        root.style.setProperty("--identity-scene-opacity", `${1 - exitProgress}`);
+        root.style.setProperty("--identity-atmosphere-y", `${exitProgress * -60}px`);
+        root.style.setProperty("--identity-portrait-opacity", `${portraitProgress * (1 - exitProgress)}`);
+        root.style.setProperty("--identity-portrait-scale", `${1.08 - portraitProgress * .08}`);
+        root.dataset.headerSurface = rawProgress > .93 && !reduceMotionQuery.matches ? "light" : "dark";
+        root.dataset.verified = verifiedProgress > .5 ? "true" : "false";
+      };
+
+      const scheduleRender = () => {
+        if (!frame) frame = requestAnimationFrame(render);
+      };
+
+      window.addEventListener("scroll", scheduleRender, { passive: true });
+      window.addEventListener("resize", scheduleRender);
+      reduceMotionQuery.addEventListener("change", scheduleRender);
+      render();
     };
 
     const updateScroll = () => {
@@ -430,6 +482,7 @@
 
     initHeroMesh();
     initPixelTransitions();
+    initIdentityUnlock();
     updateScroll();
   };
 
