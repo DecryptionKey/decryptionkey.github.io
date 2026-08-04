@@ -588,11 +588,11 @@ type SelectedWorkProject = {
   };
 };
 
-function ProjectMedia({ media, eager = false }: { media: WorkMedia; eager?: boolean }) {
+function ProjectMedia({ media, eager = false, galleryMedia = false }: { media: WorkMedia; eager?: boolean; galleryMedia?: boolean }) {
   if (/\.mp4(?:$|\?)/i.test(media.src)) {
-    return <video src={media.src} aria-label={media.alt} autoPlay loop muted playsInline preload={eager ? "auto" : "metadata"} />;
+    return <video src={media.src} aria-label={media.alt} autoPlay loop muted playsInline preload={eager ? "auto" : "metadata"} data-project-gallery-media={galleryMedia || undefined} />;
   }
-  return <img src={media.src} alt={media.alt} loading={eager ? "eager" : "lazy"} />;
+  return <img src={media.src} alt={media.alt} loading={eager ? "eager" : "lazy"} data-project-gallery-media={galleryMedia || undefined} />;
 }
 
 export function SelectedWorkShowcase({ projects }: { projects: SelectedWorkProject[] }) {
@@ -607,9 +607,6 @@ export function SelectedWorkShowcase({ projects }: { projects: SelectedWorkProje
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const lastTriggerRef = useRef<HTMLElement | null>(null);
   const showcaseRef = useRef<HTMLDivElement>(null);
-
-  const activeProject = projects[lastActiveIndex];
-  const modalProject = viewerProject === null ? null : projects[viewerProject];
 
   useEffect(() => {
     const preference = window.matchMedia("(max-width: 700px), (prefers-reduced-motion: reduce)");
@@ -691,13 +688,14 @@ export function SelectedWorkShowcase({ projects }: { projects: SelectedWorkProje
             const ProjectIcon = project.icon;
             const isActive = activeIndex === index;
             return (
-              <article className={`work-accordion-item accent-${project.accent}`} data-open={isActive || undefined} key={project.number}>
+              <article className={`work-accordion-item accent-${project.accent}`} data-project-index={index} data-open={isActive || undefined} key={project.number}>
                 <h3>
                   <button
                     type="button"
                     id={`project-trigger-${project.number}`}
                     aria-expanded={isActive}
                     aria-controls={`project-panel-${project.number}`}
+                    data-project-trigger
                     onClick={() => {
                       if (isActive) {
                         setActiveIndex(null);
@@ -720,10 +718,11 @@ export function SelectedWorkShowcase({ projects }: { projects: SelectedWorkProje
                   aria-labelledby={`project-trigger-${project.number}`}
                   aria-hidden={!isActive}
                   inert={!isActive ? true : undefined}
+                  data-project-panel
                 >
                   <div className="work-accordion-panel-inner">
                     <div className="work-mobile-media">
-                      <button type="button" onClick={() => openViewer(index, "gallery")} aria-label={`Open ${project.title} gallery`}>
+                      <button type="button" data-project-open-gallery onClick={() => openViewer(index, "gallery")} aria-label={`Open ${project.title} gallery`}>
                         <ProjectMedia media={project.gallery[0]} />
                         <span><Maximize2 size={15} aria-hidden="true" /> View gallery</span>
                       </button>
@@ -734,11 +733,11 @@ export function SelectedWorkShowcase({ projects }: { projects: SelectedWorkProje
                       {project.tags.map((tag) => <li key={tag}>{tag}</li>)}
                     </ul>
                     <div className="work-accordion-actions">
-                      <button type="button" onClick={() => openViewer(index, "gallery")}>
+                      <button type="button" data-project-open-gallery onClick={() => openViewer(index, "gallery")}>
                         <Images size={15} aria-hidden="true" /> Gallery <span>{project.gallery.length}</span>
                       </button>
                       {project.writeup && (
-                        <button type="button" onClick={() => openViewer(index, "writeup")}>
+                        <button type="button" data-project-open-writeup onClick={() => openViewer(index, "writeup")}>
                           <FileText size={15} aria-hidden="true" /> Read write-up
                         </button>
                       )}
@@ -755,82 +754,108 @@ export function SelectedWorkShowcase({ projects }: { projects: SelectedWorkProje
         </div>
 
         <div className="work-media-column" aria-live="polite">
-          <button
-            className="work-media-stage"
-            type="button"
-            key={activeProject.number}
-            onClick={() => openViewer(lastActiveIndex, "gallery")}
-            aria-label={`Open ${activeProject.title} gallery`}
-          >
-            <span className="work-media-frame">
-              <ProjectMedia media={activeProject.gallery[0]} eager />
-              <span className="work-media-grid" aria-hidden="true" />
-            </span>
-            <span className="work-media-label">
-              <span>{activeProject.number} / {activeProject.gallery.length} artifacts</span>
-              <span>Open gallery <Maximize2 size={14} aria-hidden="true" /></span>
-            </span>
-          </button>
+          {projects.map((project, index) => (
+            <button
+              className="work-media-stage"
+              type="button"
+              key={project.number}
+              hidden={lastActiveIndex !== index}
+              data-project-media-stage={index}
+              onClick={() => openViewer(index, "gallery")}
+              aria-label={`Open ${project.title} gallery`}
+            >
+              <span className="work-media-frame">
+                <ProjectMedia media={project.gallery[0]} eager={index === lastActiveIndex} />
+                <span className="work-media-grid" aria-hidden="true" />
+              </span>
+              <span className="work-media-label">
+                <span>{project.number} / {project.gallery.length} artifacts</span>
+                <span>Open gallery <Maximize2 size={14} aria-hidden="true" /></span>
+              </span>
+            </button>
+          ))}
         </div>
       </div>
 
-      {modalProject && (
-        <div className="project-viewer" role="dialog" aria-modal="true" aria-labelledby="project-viewer-title" onMouseDown={closeViewer}>
-          <div className="project-viewer-shell" onMouseDown={(event) => event.stopPropagation()}>
-            <header className="project-viewer-header">
-              <div>
-                <span>{modalProject.number} / Selected work</span>
-                <h2 id="project-viewer-title">{modalProject.title}</h2>
+      {projects.map((project, projectIndex) => {
+        const viewerOpen = viewerProject === projectIndex;
+        const resolvedMediaIndex = mediaIndex % project.gallery.length;
+        return (
+          <div
+            className="project-viewer"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={`project-viewer-title-${project.number}`}
+            data-project-viewer={projectIndex}
+            hidden={!viewerOpen}
+            onMouseDown={closeViewer}
+            key={`viewer-${project.number}`}
+          >
+            <div className="project-viewer-shell" onMouseDown={(event) => event.stopPropagation()}>
+              <header className="project-viewer-header">
+                <div>
+                  <span>{project.number} / Selected work</span>
+                  <h2 id={`project-viewer-title-${project.number}`}>{project.title}</h2>
+                </div>
+                <button ref={viewerOpen ? closeButtonRef : undefined} type="button" data-project-viewer-close onClick={closeViewer} aria-label="Close project viewer"><X size={22} aria-hidden="true" /></button>
+              </header>
+              <div className="project-viewer-tabs" role="tablist" aria-label="Project viewer modes">
+                <button type="button" role="tab" data-project-viewer-tab="gallery" aria-selected={viewerMode === "gallery"} onClick={() => setViewerMode("gallery")}><Images size={16} aria-hidden="true" /> Gallery</button>
+                {project.writeup && <button type="button" role="tab" data-project-viewer-tab="writeup" aria-selected={viewerMode === "writeup"} onClick={() => setViewerMode("writeup")}><FileText size={16} aria-hidden="true" /> Write-up</button>}
+                <a href={project.link} target="_blank" rel="noopener noreferrer">Project source <ArrowUpRight size={14} aria-hidden="true" /></a>
               </div>
-              <button ref={closeButtonRef} type="button" onClick={closeViewer} aria-label="Close project viewer"><X size={22} aria-hidden="true" /></button>
-            </header>
-            <div className="project-viewer-tabs" role="tablist" aria-label="Project viewer modes">
-              <button type="button" role="tab" aria-selected={viewerMode === "gallery"} onClick={() => setViewerMode("gallery")}><Images size={16} aria-hidden="true" /> Gallery</button>
-              {modalProject.writeup && <button type="button" role="tab" aria-selected={viewerMode === "writeup"} onClick={() => setViewerMode("writeup")}><FileText size={16} aria-hidden="true" /> Write-up</button>}
-              <a href={modalProject.link} target="_blank" rel="noopener noreferrer">Project source <ArrowUpRight size={14} aria-hidden="true" /></a>
-            </div>
 
-            {viewerMode === "gallery" ? (
-              <div className="project-gallery" role="tabpanel">
+              <div className="project-gallery" role="tabpanel" data-project-viewer-panel="gallery" hidden={viewerMode !== "gallery"}>
                 <div className="project-gallery-stage">
-                  <ProjectMedia media={modalProject.gallery[mediaIndex]} eager />
-                  <div className="project-gallery-caption"><span>{String(mediaIndex + 1).padStart(2, "0")} / {String(modalProject.gallery.length).padStart(2, "0")}</span><p>{modalProject.gallery[mediaIndex].caption}</p></div>
-                  {modalProject.gallery.length > 1 && (
+                  <ProjectMedia media={project.gallery[resolvedMediaIndex]} eager galleryMedia />
+                  <div className="project-gallery-caption"><span data-project-gallery-count>{String(resolvedMediaIndex + 1).padStart(2, "0")} / {String(project.gallery.length).padStart(2, "0")}</span><p data-project-gallery-caption>{project.gallery[resolvedMediaIndex].caption}</p></div>
+                  {project.gallery.length > 1 && (
                     <div className="project-gallery-controls">
-                      <button type="button" aria-label="Previous image" onClick={() => setMediaIndex((current) => (current - 1 + modalProject.gallery.length) % modalProject.gallery.length)}><ArrowLeft size={18} aria-hidden="true" /></button>
-                      <button type="button" aria-label="Next image" onClick={() => setMediaIndex((current) => (current + 1) % modalProject.gallery.length)}><ArrowRight size={18} aria-hidden="true" /></button>
+                      <button type="button" data-project-gallery-previous aria-label="Previous image" onClick={() => setMediaIndex((current) => (current - 1 + project.gallery.length) % project.gallery.length)}><ArrowLeft size={18} aria-hidden="true" /></button>
+                      <button type="button" data-project-gallery-next aria-label="Next image" onClick={() => setMediaIndex((current) => (current + 1) % project.gallery.length)}><ArrowRight size={18} aria-hidden="true" /></button>
                     </div>
                   )}
                 </div>
                 <div className="project-gallery-thumbs" aria-label="Gallery images">
-                  {modalProject.gallery.map((media, index) => (
-                    <button type="button" data-active={mediaIndex === index || undefined} onClick={() => setMediaIndex(index)} key={media.src} aria-label={`View ${media.caption}`}>
+                  {project.gallery.map((media, index) => (
+                    <button
+                      type="button"
+                      data-project-gallery-thumb={index}
+                      data-media-src={media.src}
+                      data-media-alt={media.alt}
+                      data-media-caption={media.caption}
+                      data-media-video={/\.mp4(?:$|\?)/i.test(media.src) || undefined}
+                      data-active={resolvedMediaIndex === index || undefined}
+                      onClick={() => setMediaIndex(index)}
+                      key={media.src}
+                      aria-label={`View ${media.caption}`}
+                    >
                       <ProjectMedia media={media} />
                       <span>{String(index + 1).padStart(2, "0")}</span>
                     </button>
                   ))}
                 </div>
               </div>
-            ) : (
-              <article className="project-writeup" role="tabpanel">
+
+              {project.writeup && <article className="project-writeup" role="tabpanel" data-project-viewer-panel="writeup" hidden={viewerMode !== "writeup"}>
                 <div className="project-writeup-intro">
-                  <span>{modalProject.role} · {modalProject.context}</span>
-                  <p>{modalProject.writeup?.intro}</p>
-                  {modalProject.writeupHref && <a href={modalProject.writeupHref} target="_blank" rel="noopener noreferrer">Open raw Markdown <ArrowUpRight size={14} aria-hidden="true" /></a>}
+                  <span>{project.role} · {project.context}</span>
+                  <p>{project.writeup.intro}</p>
+                  {project.writeupHref && <a href={project.writeupHref} target="_blank" rel="noopener noreferrer">Open raw Markdown <ArrowUpRight size={14} aria-hidden="true" /></a>}
                 </div>
                 <div className="project-writeup-sections">
-                  {modalProject.writeup?.sections.map((section, index) => (
+                  {project.writeup.sections.map((section, index) => (
                     <section key={section.heading}>
                       <span>{String(index + 1).padStart(2, "0")}</span>
                       <div><h3>{section.heading}</h3><p>{section.body}</p>{section.code && <pre><code>{section.code}</code></pre>}</div>
                     </section>
                   ))}
                 </div>
-              </article>
-            )}
+              </article>}
+            </div>
           </div>
-        </div>
-      )}
+        );
+      })}
     </>
   );
 }

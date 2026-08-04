@@ -22,6 +22,10 @@ test("renders the complete portfolio", async () => {
   assert.match(html, /Selected work/);
   assert.match(html, /Patch Management &amp; System Hardening/);
   assert.match(html, /data-selected-work-showcase/);
+  assert.equal((html.match(/data-project-viewer=/g) ?? []).length, 4);
+  assert.match(html, /data-project-open-gallery/);
+  assert.match(html, /data-project-open-writeup/);
+  assert.match(html, /data-project-gallery-thumb/);
   assert.match(html, /media\/projects\/project-1\/patch-log\.gif/);
   assert.match(html, /Read write-up/);
   assert.match(html, /Gallery/);
@@ -108,6 +112,9 @@ test("GitHub Pages export is fully static", async () => {
   const articleHtml = await readFile(new URL("../dist/client/blog/ubuntu-security-baseline/index.html", import.meta.url), "utf8");
   assert.match(html, /static\.js\?v=[a-f0-9]{12}/);
   assert.match(staticScript, /initIdentityUnlock/);
+  assert.match(staticScript, /initSelectedWork/);
+  assert.match(staticScript, /data-project-open-gallery/);
+  assert.match(staticScript, /data-project-gallery-next/);
   assert.match(staticScript, /--identity-scan-progress/);
   assert.match(staticScript, /--identity-portrait-opacity/);
   assert.match(html, /Content-Security-Policy/);

@@ -269,6 +269,202 @@
       render();
     };
 
+    const initSelectedWork = () => {
+      const showcase = document.querySelector("[data-selected-work-showcase]");
+      if (!showcase) return;
+
+      const items = [...showcase.querySelectorAll("[data-project-index]")];
+      const mediaStages = [...showcase.querySelectorAll("[data-project-media-stage]")];
+      const viewers = [...document.querySelectorAll("[data-project-viewer]")];
+      if (!items.length || !viewers.length) return;
+
+      const motionPreference = window.matchMedia("(max-width: 700px), (prefers-reduced-motion: reduce)");
+      let activeIndex = items.findIndex((item) => item.hasAttribute("data-open"));
+      let lastActiveIndex = Math.max(0, activeIndex);
+      let viewerIndex = null;
+      let galleryIndex = 0;
+      let autoTimer = 0;
+      let inView = false;
+      let paused = false;
+      let lastTrigger = null;
+      let previousOverflow = "";
+
+      const refreshProgress = () => {
+        items.forEach((item) => item.querySelector(".work-accordion-progress")?.remove());
+        if (activeIndex === null || motionPreference.matches) return;
+        const progress = document.createElement("span");
+        progress.className = "work-accordion-progress";
+        progress.setAttribute("aria-hidden", "true");
+        items[activeIndex]?.appendChild(progress);
+      };
+
+      const scheduleAuto = () => {
+        window.clearTimeout(autoTimer);
+        if (activeIndex === null || !inView || paused || motionPreference.matches || viewerIndex !== null || items.length < 2) return;
+        autoTimer = window.setTimeout(() => {
+          const nextIndex = (activeIndex + 1) % items.length;
+          setActive(nextIndex);
+        }, 9000);
+      };
+
+      const setActive = (nextIndex) => {
+        activeIndex = nextIndex;
+        if (nextIndex !== null) lastActiveIndex = nextIndex;
+        items.forEach((item, index) => {
+          const open = index === nextIndex;
+          const trigger = item.querySelector("[data-project-trigger]");
+          const panel = item.querySelector("[data-project-panel]");
+          item.toggleAttribute("data-open", open);
+          trigger?.setAttribute("aria-expanded", String(open));
+          panel?.setAttribute("aria-hidden", String(!open));
+          panel?.toggleAttribute("inert", !open);
+        });
+        mediaStages.forEach((stage, index) => { stage.hidden = index !== lastActiveIndex; });
+        showcase.toggleAttribute("data-collapsed", nextIndex === null);
+        refreshProgress();
+        scheduleAuto();
+      };
+
+      const updateGallery = (viewer, nextIndex) => {
+        const thumbs = [...viewer.querySelectorAll("[data-project-gallery-thumb]")];
+        if (!thumbs.length) return;
+        galleryIndex = (nextIndex + thumbs.length) % thumbs.length;
+        const thumb = thumbs[galleryIndex];
+        const source = thumb.dataset.mediaSrc || "";
+        const alt = thumb.dataset.mediaAlt || "Project artifact";
+        const caption = thumb.dataset.mediaCaption || alt;
+        const isVideo = thumb.dataset.mediaVideo === "true";
+        const currentMedia = viewer.querySelector("[data-project-gallery-media]");
+        const replacement = document.createElement(isVideo ? "video" : "img");
+        replacement.setAttribute("data-project-gallery-media", "true");
+        replacement.src = source;
+        if (isVideo) {
+          replacement.setAttribute("aria-label", alt);
+          replacement.autoplay = true;
+          replacement.loop = true;
+          replacement.muted = true;
+          replacement.playsInline = true;
+          replacement.preload = "auto";
+        } else {
+          replacement.alt = alt;
+          replacement.loading = "eager";
+        }
+        currentMedia?.replaceWith(replacement);
+        const count = viewer.querySelector("[data-project-gallery-count]");
+        const captionNode = viewer.querySelector("[data-project-gallery-caption]");
+        if (count) count.textContent = `${String(galleryIndex + 1).padStart(2, "0")} / ${String(thumbs.length).padStart(2, "0")}`;
+        if (captionNode) captionNode.textContent = caption;
+        thumbs.forEach((candidate, index) => candidate.toggleAttribute("data-active", index === galleryIndex));
+      };
+
+      const setViewerMode = (viewer, mode) => {
+        viewer.querySelectorAll("[data-project-viewer-tab]").forEach((tab) => {
+          tab.setAttribute("aria-selected", String(tab.dataset.projectViewerTab === mode));
+        });
+        viewer.querySelectorAll("[data-project-viewer-panel]").forEach((panel) => {
+          panel.hidden = panel.dataset.projectViewerPanel !== mode;
+        });
+        if (mode === "gallery") updateGallery(viewer, galleryIndex);
+      };
+
+      const closeViewer = () => {
+        if (viewerIndex === null) return;
+        viewers[viewerIndex].hidden = true;
+        viewerIndex = null;
+        document.body.style.overflow = previousOverflow;
+        window.setTimeout(() => lastTrigger?.focus?.(), 0);
+        scheduleAuto();
+      };
+
+      const openViewer = (projectIndex, mode, trigger) => {
+        const viewer = viewers[projectIndex];
+        if (!viewer) return;
+        lastTrigger = trigger;
+        previousOverflow = document.body.style.overflow;
+        viewers.forEach((candidate, index) => { candidate.hidden = index !== projectIndex; });
+        viewerIndex = projectIndex;
+        galleryIndex = 0;
+        document.body.style.overflow = "hidden";
+        setViewerMode(viewer, mode);
+        updateGallery(viewer, 0);
+        window.clearTimeout(autoTimer);
+        window.setTimeout(() => viewer.querySelector("[data-project-viewer-close]")?.focus(), 0);
+      };
+
+      items.forEach((item, index) => {
+        item.querySelector("[data-project-trigger]")?.addEventListener("click", () => setActive(activeIndex === index ? null : index));
+        item.querySelectorAll("[data-project-open-gallery]").forEach((trigger) => {
+          trigger.addEventListener("click", () => openViewer(index, "gallery", trigger));
+        });
+        item.querySelectorAll("[data-project-open-writeup]").forEach((trigger) => {
+          trigger.addEventListener("click", () => openViewer(index, "writeup", trigger));
+        });
+      });
+
+      mediaStages.forEach((stage, index) => {
+        stage.addEventListener("click", () => openViewer(index, "gallery", stage));
+      });
+
+      viewers.forEach((viewer) => {
+        viewer.addEventListener("mousedown", (event) => { if (event.target === viewer) closeViewer(); });
+        viewer.querySelector("[data-project-viewer-close]")?.addEventListener("click", closeViewer);
+        viewer.querySelectorAll("[data-project-viewer-tab]").forEach((viewerTab) => {
+          viewerTab.addEventListener("click", () => setViewerMode(viewer, viewerTab.dataset.projectViewerTab));
+        });
+        viewer.querySelector("[data-project-gallery-previous]")?.addEventListener("click", () => updateGallery(viewer, galleryIndex - 1));
+        viewer.querySelector("[data-project-gallery-next]")?.addEventListener("click", () => updateGallery(viewer, galleryIndex + 1));
+        viewer.querySelectorAll("[data-project-gallery-thumb]").forEach((thumb) => {
+          thumb.addEventListener("click", () => updateGallery(viewer, Number(thumb.dataset.projectGalleryThumb || 0)));
+        });
+      });
+
+      showcase.addEventListener("pointerenter", () => {
+        paused = true;
+        showcase.setAttribute("data-paused", "");
+        scheduleAuto();
+      });
+      showcase.addEventListener("pointerleave", () => {
+        paused = false;
+        showcase.removeAttribute("data-paused");
+        scheduleAuto();
+      });
+      showcase.addEventListener("focusin", () => {
+        paused = true;
+        showcase.setAttribute("data-paused", "");
+        scheduleAuto();
+      });
+      showcase.addEventListener("focusout", (event) => {
+        if (showcase.contains(event.relatedTarget)) return;
+        paused = false;
+        showcase.removeAttribute("data-paused");
+        scheduleAuto();
+      });
+
+      window.addEventListener("keydown", (event) => {
+        if (viewerIndex === null) return;
+        const viewer = viewers[viewerIndex];
+        if (event.key === "Escape") {
+          closeViewer();
+        } else if (!viewer.querySelector('[data-project-viewer-panel="gallery"]')?.hidden && event.key === "ArrowRight") {
+          updateGallery(viewer, galleryIndex + 1);
+        } else if (!viewer.querySelector('[data-project-viewer-panel="gallery"]')?.hidden && event.key === "ArrowLeft") {
+          updateGallery(viewer, galleryIndex - 1);
+        }
+      });
+
+      const observer = new IntersectionObserver(([entry]) => {
+        inView = entry.isIntersecting;
+        showcase.toggleAttribute("data-in-view", inView);
+        scheduleAuto();
+      }, { threshold: .28 });
+      observer.observe(showcase);
+      motionPreference.addEventListener("change", () => {
+        refreshProgress();
+        scheduleAuto();
+      });
+      setActive(activeIndex >= 0 ? activeIndex : null);
+    };
+
     const updateScroll = () => {
       const y = window.scrollY;
       const scrollable = document.documentElement.scrollHeight - window.innerHeight;
@@ -483,6 +679,7 @@
     initHeroMesh();
     initPixelTransitions();
     initIdentityUnlock();
+    initSelectedWork();
     updateScroll();
   };
 
