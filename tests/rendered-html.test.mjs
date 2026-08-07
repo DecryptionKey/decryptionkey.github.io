@@ -48,10 +48,14 @@ test("renders the complete portfolio", async () => {
   assert.match(html, /Career-relevant certifications/);
   assert.match(html, /data-certification-carousel/);
   assert.match(html, /Credentials in motion/);
-  assert.equal((html.match(/data-certification-card/g) ?? []).length, 20);
+  assert.equal((html.match(/data-certification-card/g) ?? []).length, 24);
   assert.match(html, /Certified AI Security Fundamentals/);
+  assert.match(html, /Certified AI Trust Practitioner/);
+  assert.match(html, /Certified DSPM Architect/);
   assert.match(html, /media\/certifications\/cyera-ai-security\.png/);
   assert.match(html, /media\/certifications\/cyera-dspm\.png/);
+  assert.match(html, /media\/certifications\/cyera-ai-trust-practitioner\.png/);
+  assert.match(html, /media\/certifications\/cyera-dspm-architect\.png/);
   assert.match(html, /AWS Security Fundamentals/);
   assert.match(html, /media\/certifications\/aws\.svg/);
   assert.match(html, /NIST Cybersecurity Framework 2\.0 Primer/);
@@ -155,6 +159,8 @@ test("GitHub Pages export is fully static", async () => {
   }
   await readFile(new URL("../dist/client/media/certifications/cyera-ai-security.png", import.meta.url));
   await readFile(new URL("../dist/client/media/certifications/cyera-dspm.png", import.meta.url));
+  await readFile(new URL("../dist/client/media/certifications/cyera-ai-trust-practitioner.png", import.meta.url));
+  await readFile(new URL("../dist/client/media/certifications/cyera-dspm-architect.png", import.meta.url));
   const awsCertificationLogo = await readFile(new URL("../dist/client/media/certifications/aws.svg", import.meta.url), "utf8");
   const microsoftCertificationLogo = await readFile(new URL("../dist/client/media/certifications/microsoft.svg", import.meta.url), "utf8");
   const linkedInCertificationLogo = await readFile(new URL("../dist/client/media/certifications/linkedin.svg", import.meta.url), "utf8");

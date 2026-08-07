@@ -253,6 +253,26 @@ const certifications = [
   },
   {
     number: "04",
+    title: "Certified AI Trust Practitioner",
+    issuer: "Cyera",
+    issued: "August 2026",
+    focus: "AI trust · Trust targets · Decision models",
+    logo: "/media/certifications/cyera-ai-trust-practitioner.png",
+    logoClass: "cyera",
+    href: "https://www.linkedin.com/in/manyewade/overlay/Certifications/1586577395/treasury/?profileId=ACoAAEyqau0BJ4wgvcLgDtK4DqBxKKybtDm-26Q",
+  },
+  {
+    number: "05",
+    title: "Certified DSPM Architect",
+    issuer: "Cyera",
+    issued: "August 2026",
+    focus: "DSPM strategy · Maturity modeling · Data lifecycle",
+    logo: "/media/certifications/cyera-dspm-architect.png",
+    logoClass: "cyera",
+    href: "https://www.linkedin.com/in/manyewade/overlay/Certifications/1585983812/treasury/?profileId=ACoAAEyqau0BJ4wgvcLgDtK4DqBxKKybtDm-26Q",
+  },
+  {
+    number: "06",
     title: "Security Pro — Strengthen Security Foundations",
     issuer: "Microsoft AI Skills Fest 2026",
     issued: "June 2026",
@@ -262,7 +282,7 @@ const certifications = [
     href: "https://www.credly.com/badges/9f4fc45f-eee9-4248-a31c-4e1d5125f3a5/public_url",
   },
   {
-    number: "05",
+    number: "07",
     title: "NIST Cybersecurity Framework 2.0 Primer",
     issuer: "LinkedIn Learning · Pearson",
     issued: "June 2026",
@@ -272,7 +292,7 @@ const certifications = [
     href: "https://www.linkedin.com/learning/certificates/d163edb3ba9f067d4b3f8c74a61e489c48aac462a878109e017729a5629d5cf2/",
   },
   {
-    number: "06",
+    number: "08",
     title: "Threat Modeling for Security Professionals",
     issuer: "LinkedIn Learning",
     issued: "June 2026",
@@ -282,7 +302,7 @@ const certifications = [
     href: "https://www.linkedin.com/learning/certificates/ddd9f4b6b8cb72a26203ff5a864080b9358e5813fdd6cdd74b5f560573bfa9db/",
   },
   {
-    number: "07",
+    number: "09",
     title: "Student SOC Program Foundations",
     issuer: "Microsoft",
     issued: "July 2025",
@@ -292,7 +312,7 @@ const certifications = [
     href: "https://www.linkedin.com/in/manyewade/overlay/Certifications/2036896465/treasury/?profileId=ACoAAEyqau0BJ4wgvcLgDtK4DqBxKKybtDm-26Q",
   },
   {
-    number: "08",
+    number: "10",
     title: "Introduction to Incident Command System — ICS-100",
     issuer: "FEMA",
     issued: "May 2026",
@@ -302,7 +322,7 @@ const certifications = [
     href: "https://www.linkedin.com/in/manyewade/overlay/Certifications/1972923309/treasury/?profileId=ACoAAEyqau0BJ4wgvcLgDtK4DqBxKKybtDm-26Q",
   },
   {
-    number: "09",
+    number: "11",
     title: "Introduction to the National Incident Management System",
     issuer: "FEMA",
     issued: "May 2026",
@@ -312,7 +332,7 @@ const certifications = [
     href: "https://www.linkedin.com/in/manyewade/overlay/Certifications/1973003784/treasury/?profileId=ACoAAEyqau0BJ4wgvcLgDtK4DqBxKKybtDm-26Q",
   },
   {
-    number: "10",
+    number: "12",
     title: "National Response Framework — An Introduction",
     issuer: "FEMA",
     issued: "May 2026",
@@ -527,7 +547,7 @@ export default function Home() {
           </div>
           <div className="certification-carousel-context">
             <span>Credentials in motion</span>
-            <span>10 verified credentials · Hover to pause · Select to verify</span>
+            <span>12 verified credentials · Hover to pause · Select to verify</span>
           </div>
           <div className="certification-viewport" aria-label="Career-relevant certifications carousel">
             <div className="certification-track">
