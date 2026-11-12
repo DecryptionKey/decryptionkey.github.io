@@ -350,12 +350,12 @@ const employers = [
     name: "Paramount",
     logo: "/media/paramount-logo-white.svg",
     activeLogo: "/media/paramount-logo-white.svg",
-    period: "Jun 2026—Present",
+    period: "Jun 2026—Aug 2026",
     summary: "Cloud security automation & governance",
     roles: [
       {
         title: "Information Security Intern (Cloud Security)",
-        dates: "June 2026—Present",
+        dates: "June 2026—August 2026",
         location: "Hauppauge, New York",
         bullets: [
           "Migrating legacy automation rules by building multi-step Wiz workflows that integrate with Jira and Slack, routing security findings to designated owners and Jira queues by severity.",
